@@ -1,4 +1,16 @@
-# JobSerbia — Доска вакансий для русскоязычных в Сербии
+# 🇷🇸 JobSerbia — Доска вакансий для русскоязычных в Сербии
+
+[![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-blue?style=flat-square&logo=github)](https://bat801.github.io/JobSerbia/)
+[![Made with](https://img.shields.io/badge/Made%20with-HTML%2FCSS%2FJS-blue)](#)
+[![Supabase](https://img.shields.io/badge/Supabase-Database-green?style=flat-square&logo=supabase)](https://supabase.com)
+[![Tailwind CSS](https://img.shields.io/badge/CSS-Tailwind-38B2AC)](https://tailwindcss.com/)
+[![GitHub stars](https://img.shields.io/github/stars/bat801/jobserbia)](https://github.com/bat801/jobserbia/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/bat801/jobserbia)](https://github.com/bat801/jobserbia/network)
+[![GitHub issues](https://img.shields.io/github/issues/bat801/jobserbia)](https://github.com/bat801/jobserbia/issues)
+[![GitHub last commit](https://img.shields.io/github/last-commit/bat801/jobserbia)](https://github.com/bat801/jobserbia/commits/main)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+---
 
 **JobSerbia** — это прототип сайта по поиску работы, ориентированный на русскоязычных соискателей и работодателей в Сербии.  
 Проект создан как MVP (минимально жизнеспособный продукт) и включает все базовые функции: просмотр вакансий, фильтрацию, публикацию и админ-панель для модерации.
