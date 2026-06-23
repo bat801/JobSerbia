@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objavi oglas — JobSerbia</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { blue: { 600: '#2563EB' }, slate: { 50: '#F8FAFC', 500: '#64748B', 800: '#1E293B' } } } }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-white">
+
+    <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
+        <div class="max-w-[800px] mx-auto px-4 h-[72px] flex items-center">
+            <button onclick="history.back()" class="mr-4 text-2xl text-slate-500 hover:text-slate-800">←</button>
+            <a href="index-sr.html" class="text-2xl font-bold text-slate-800">JobSerbia</a>
+            
+            <div class="ml-auto flex gap-1">
+                <a href="publish.html" class="px-2 py-1 text-sm rounded-lg hover:bg-slate-100">🇷🇺</a>
+                <a href="publish-sr.html" class="px-2 py-1 text-sm rounded-lg bg-blue-100 text-blue-700 font-medium">🇷🇸</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-[800px] mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold text-slate-800 mb-6">Novi oglas 📤</h1>
+        
+        <form id="publish-form" class="bg-slate-50 p-6 rounded-[16px] border border-slate-200 flex flex-col gap-5">
+            <div>
+                <label class="block font-medium text-slate-800 mb-1">Pozicija <span class="text-red-500">*</span></label>
+                <input type="text" id="p-title" required placeholder="Na primer: Frontend Developer" class="w-full px-4 min-h-[48px] rounded-xl border border-slate-300 focus:outline-none focus:border-blue-600">
+            </div>
+
+            <div>
+                <label class="block font-medium text-slate-800 mb-1">Kompanija <span class="text-red-500">*</span></label>
+                <input type="text" id="p-company" required placeholder="Naziv vaše kompanije" class="w-full px-4 min-h-[48px] rounded-xl border border-slate-300 focus:outline-none focus:border-blue-600">
+            </div>
+
+            <div>
+                <label class="block font-medium text-slate-800 mb-1">Grad <span class="text-red-500">*</span></label>
+                <select id="p-city" required class="w-full px-4 min-h-[48px] rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-blue-600">
+                    <option value="" disabled selected>Izaberite grad</option>
+                    <option value="Белград">Beograd</option>
+                    <option value="Нови-Сад">Novi Sad</option>
+                    <option value="Ниш">Niš</option>
+                    <option value="Крагуевац">Kragujevac</option>
+                    <option value="Суботица">Subotica</option>
+                    <option value="Другие">Ostalo</option>
+                </select>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div class="flex-1">
+                    <label class="block font-medium text-slate-800 mb-1">Plata od (€) <span class="text-red-500">*</span></label>
+                    <input type="number" id="p-salary-min" required placeholder="1000" class="w-full px-4 min-h-[48px] rounded-xl border border-slate-300 focus:outline-none focus:border-blue-600">
+                </div>
+                <div class="flex-1">
+                    <label class="block font-medium text-slate-800 mb-1">Plata do (€) <span class="text-red-500">*</span></label>
+                    <input type="number" id="p-salary-max" required placeholder="2000" class="w-full px-4 min-h-[48px] rounded-xl border border-slate-300 focus:outline-none focus:border-blue-600">
+                </div>
+            </div>
+
+            <div>
+                <label class="block font-medium text-slate-800 mb-1">Kontakt <span class="text-red-500">*</span></label>
+                <input type="text" id="p-contacts" required placeholder="Telefon, Telegram (@username), Email" class="w-full px-4 min-h-[48px] rounded-xl border border-slate-300 focus:outline-none focus:border-blue-600">
+            </div>
+
+            <div>
+                <label class="block font-medium text-slate-800 mb-1">Opis oglasa <span class="text-red-500">*</span></label>
+                <textarea id="p-description" required rows="5" placeholder="Opišite zadatke, zahteve i uslove..." class="w-full p-4 rounded-xl border border-slate-300 focus:outline-none focus:border-blue-600 resize-y"></textarea>
+            </div>
+
+            <button type="submit" id="submit-btn" class="w-full min-h-[48px] mt-2 rounded-xl bg-blue-600 text-white font-bold text-[16px] hover:bg-blue-700 transition">
+                Objavi oglas
+            </button>
+        </form>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        document.getElementById('publish-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.textContent = 'Objavljivanje...';
+
+            const newVacancy = {
+                title: document.getElementById('p-title').value.trim(),
+                company: document.getElementById('p-company').value.trim(),
+                city: document.getElementById('p-city').value,
+                salary_min: document.getElementById('p-salary-min').value,
+                salary_max: document.getElementById('p-salary-max').value,
+                contacts: document.getElementById('p-contacts').value.trim(),
+                description: document.getElementById('p-description').value.trim(),
+                is_active: true
+            };
+
+            const { data, error } = await supabaseClient.from('vacancies').insert([newVacancy]);
+
+            if (error) {
+                alert("Došlo je do greške prilikom objavljivanja. Proverite konzolu.");
+                console.error(error);
+                btn.disabled = false;
+                btn.textContent = 'Objavi oglas';
+            } else {
+                showToast("Oglas objavljen!");
+                setTimeout(() => {
+                    window.location.href = 'index-sr.html';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

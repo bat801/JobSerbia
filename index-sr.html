@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="sr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#FFFFFF">
-    <title>JobSerbia — Работа в Сербии</title>
+    <title>JobSerbia — Posao u Srbiji</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -18,18 +18,18 @@
 
     <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
         <div class="max-w-[800px] mx-auto px-4 h-[72px] flex items-center justify-between">
-            <a href="index.html" class="text-2xl font-bold text-slate-800">JobSerbia</a>
+            <a href="index-sr.html" class="text-2xl font-bold text-slate-800">JobSerbia</a>
             <div class="flex gap-4 items-center">
                 <!-- Переключатель языков -->
                 <div class="flex gap-1">
-                    <a href="index.html" class="px-2 py-1 text-sm rounded-lg bg-blue-100 text-blue-700 font-medium">🇷🇺</a>
-                    <a href="index-sr.html" class="px-2 py-1 text-sm rounded-lg hover:bg-slate-100">🇷🇸</a>
+                    <a href="index.html" class="px-2 py-1 text-sm rounded-lg hover:bg-slate-100">🇷🇺</a>
+                    <a href="index-sr.html" class="px-2 py-1 text-sm rounded-lg bg-blue-100 text-blue-700 font-medium">🇷🇸</a>
                 </div>
                 
-                <a href="about.html" class="text-slate-500 hover:text-blue-600 about-link">
-                    <span>О проекте</span>
+                <a href="about-sr.html" class="text-slate-500 hover:text-blue-600 about-link">
+                    <span>O projektu</span>
                 </a>
-                <a href="publish.html" class="min-h-[48px] px-6 rounded-xl bg-blue-600 text-white font-medium flex items-center justify-center hover:bg-blue-700 transition">Опубликовать</a>
+                <a href="publish-sr.html" class="min-h-[48px] px-6 rounded-xl bg-blue-600 text-white font-medium flex items-center justify-center hover:bg-blue-700 transition">Objavi</a>
             </div>
         </div>
     </header>
@@ -38,40 +38,40 @@
         <div class="max-w-[800px] mx-auto px-4 flex flex-col gap-3 sm:flex-row">
             <div class="relative flex-1">
                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">🔍</span>
-                <input type="text" id="search-input" placeholder="Должность, компания..." 
+                <input type="text" id="search-input" placeholder="Pozicija, kompanija..." 
                     class="w-full pl-10 pr-4 min-h-[48px] rounded-xl border border-slate-300 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600">
             </div>
             
             <div class="flex gap-3">
                 <select id="city-filter" class="w-full sm:w-[150px] px-4 min-h-[48px] rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-blue-600 text-slate-800">
-                    <option value="">Все города</option>
-                    <option value="Белград">Белград</option>
-                    <option value="Нови-Сад">Нови-Сад</option>
-                    <option value="Ниш">Ниш</option>
-                    <option value="Крагуевац">Крагуевац</option>
-                    <option value="Суботица">Суботица</option>
-                    <option value="Другие">Другие</option>
+                    <option value="">Svi gradovi</option>
+                    <option value="Белград">Beograd</option>
+                    <option value="Нови-Сад">Novi Sad</option>
+                    <option value="Ниш">Niš</option>
+                    <option value="Крагуевац">Kragujevac</option>
+                    <option value="Суботица">Subotica</option>
+                    <option value="Другие">Ostalo</option>
                 </select>
 
-                <input type="number" id="salary-min" placeholder="€ От" class="w-20 px-3 min-h-[48px] rounded-xl border border-slate-300 focus:outline-none focus:border-blue-600">
+                <input type="number" id="salary-min" placeholder="€ Od" class="w-20 px-3 min-h-[48px] rounded-xl border border-slate-300 focus:outline-none focus:border-blue-600">
             </div>
-            <button id="apply-filters" class="min-h-[48px] px-6 rounded-xl bg-slate-800 text-white font-medium hover:bg-slate-700 w-full sm:w-auto">Искать</button>
+            <button id="apply-filters" class="min-h-[48px] px-6 rounded-xl bg-slate-800 text-white font-medium hover:bg-slate-700 w-full sm:w-auto">Pretraži</button>
         </div>
     </section>
 
     <main class="max-w-[800px] mx-auto px-4 py-8">
         <div id="vacancies-container" class="flex flex-col gap-4">
-            <div id="loader" class="text-center py-10 text-slate-500">Загрузка вакансий...</div>
+            <div id="loader" class="text-center py-10 text-slate-500">Učitavanje oglasa...</div>
         </div>
 
         <div id="empty-state" class="hidden text-center py-12">
             <div class="text-4xl mb-4">🤷‍♂️</div>
-            <h3 class="text-lg font-medium text-slate-800">По вашему запросу ничего не найдено</h3>
-            <p class="text-slate-500 mt-2">Попробуйте изменить фильтры поиска.</p>
+            <h3 class="text-lg font-medium text-slate-800">Po vašem upitu nije pronađeno ništa</h3>
+            <p class="text-slate-500 mt-2">Pokušajte da promenite filtere pretrage.</p>
         </div>
 
         <button id="load-more-btn" class="hidden w-full mt-6 min-h-[48px] rounded-xl border-2 border-slate-200 text-slate-800 font-medium hover:border-slate-300 hover:bg-slate-50 transition">
-            Загрузить ещё
+            Učitaj još
         </button>
     </main>
 
@@ -89,7 +89,7 @@
         // Создание HTML-карточки
         function createCardHtml(job) {
             return `
-                <a href="vacancy.html?id=${job.id}" class="block bg-slate-50 rounded-[16px] p-4 shadow-sm border border-slate-100 hover:shadow-md transition cursor-pointer">
+                <a href="vacancy-sr.html?id=${job.id}" class="block bg-slate-50 rounded-[16px] p-4 shadow-sm border border-slate-100 hover:shadow-md transition cursor-pointer">
                     <div class="flex justify-between items-start gap-4">
                         <div>
                             <h2 class="text-[18px] font-bold text-slate-800 mb-1 leading-tight">${job.title}</h2>
@@ -121,9 +121,7 @@
 
             let query = supabaseClient.from('vacancies').select('*').eq('is_active', true).order('created_at', { ascending: false });
 
-            // Применяем фильтры
             if (searchVal) {
-                // Поиск по нескольким колонкам (ilike - регистронезависимо)
                 query = query.or(`title.ilike.%${searchVal}%,company.ilike.%${searchVal}%,description.ilike.%${searchVal}%`);
             }
             if (cityVal) {
@@ -133,7 +131,6 @@
                 query = query.gte('salary_min', salaryMinVal);
             }
 
-            // Пагинация
             const start = currentPage * ITEMS_PER_PAGE;
             const end = start + ITEMS_PER_PAGE - 1;
             query = query.range(start, end);
@@ -143,7 +140,7 @@
             loader.classList.add('hidden');
 
             if (error) {
-                console.error("Ошибка загрузки:", error);
+                console.error("Greška pri učitavanju:", error);
                 return;
             }
 
@@ -163,7 +160,6 @@
             }
         }
 
-        // Обработчики
         applyFiltersBtn.addEventListener('click', () => fetchVacancies(true));
         document.getElementById('search-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') fetchVacancies(true) });
         loadMoreBtn.addEventListener('click', () => {
@@ -171,14 +167,12 @@
             fetchVacancies();
         });
 
-        // Ограничение на ввод зарплаты (не более 4 цифр)
         document.getElementById('salary-min').addEventListener('input', function() {
             if (this.value.length > 4) {
                 this.value = this.value.slice(0, 4);
             }
         });
 
-        // Первый рендер
         fetchVacancies(true);
     </script>
 </body>

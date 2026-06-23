@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="sr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вакансия — JobSerbia</title>
+    <title>Oglas — JobSerbia</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -18,22 +18,22 @@
     <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
         <div class="max-w-[800px] mx-auto px-4 h-[72px] flex items-center">
             <button onclick="history.back()" class="mr-4 text-2xl text-slate-500 hover:text-slate-800">←</button>
-            <a href="index.html" class="text-2xl font-bold text-slate-800">JobSerbia</a>
+            <a href="index-sr.html" class="text-2xl font-bold text-slate-800">JobSerbia</a>
             
             <div class="ml-auto flex gap-1">
-                <a href="vacancy.html" class="px-2 py-1 text-sm rounded-lg bg-blue-100 text-blue-700 font-medium" id="lang-ru-vacancy">🇷🇺</a>
-                <a href="vacancy-sr.html" class="px-2 py-1 text-sm rounded-lg hover:bg-slate-100" id="lang-sr-vacancy">🇷🇸</a>
+                <a href="vacancy.html?id=${vacancyId}" class="px-2 py-1 text-sm rounded-lg hover:bg-slate-100">🇷🇺</a>
+                <a href="vacancy-sr.html?id=${vacancyId}" class="px-2 py-1 text-sm rounded-lg bg-blue-100 text-blue-700 font-medium">🇷🇸</a>
             </div>
         </div>
     </header>
 
     <main class="max-w-[800px] mx-auto px-4 py-8">
-        <div id="loader" class="text-center py-10 text-slate-500">Загрузка данных...</div>
+        <div id="loader" class="text-center py-10 text-slate-500">Učitavanje podataka...</div>
         
         <div id="error-state" class="hidden text-center py-12">
             <div class="text-4xl mb-4">😔</div>
-            <h3 class="text-xl font-bold text-slate-800 mb-4">Вакансия не найдена</h3>
-            <a href="index.html" class="inline-flex min-h-[48px] px-6 rounded-xl bg-blue-600 text-white font-medium items-center justify-center">На главную</a>
+            <h3 class="text-xl font-bold text-slate-800 mb-4">Oglas nije pronađen</h3>
+            <a href="index-sr.html" class="inline-flex min-h-[48px] px-6 rounded-xl bg-blue-600 text-white font-medium items-center justify-center">Na početnu</a>
         </div>
 
         <article id="vacancy-content" class="hidden">
@@ -50,13 +50,13 @@
             <hr class="border-slate-200 mb-6">
 
             <div class="mb-8">
-                <h3 class="text-lg font-bold text-slate-800 mb-3">Описание вакансии</h3>
+                <h3 class="text-lg font-bold text-slate-800 mb-3">Opis oglasa</h3>
                 <div id="v-description" class="text-slate-800 leading-relaxed whitespace-pre-wrap"></div>
             </div>
 
             <div class="bg-blue-50 border border-blue-100 rounded-[16px] p-6 text-center sm:text-left sm:flex justify-between items-center gap-4">
                 <div class="mb-4 sm:mb-0">
-                    <p class="text-sm font-medium text-blue-600 uppercase tracking-wider mb-1">Контакты работодателя</p>
+                    <p class="text-sm font-medium text-blue-600 uppercase tracking-wider mb-1">Kontakt poslodavca</p>
                     <p id="v-contacts" class="text-lg font-bold text-slate-800"></p>
                 </div>
                 <div class="flex gap-2 justify-center" id="action-buttons">
@@ -67,7 +67,6 @@
 
     <script src="app.js"></script>
     <script>
-        // Получаем ID из URL
         const urlParams = new URLSearchParams(window.location.search);
         const vacancyId = urlParams.get('id');
 
@@ -109,49 +108,34 @@
             document.getElementById('v-description').textContent = job.description;
             document.getElementById('v-contacts').textContent = job.contacts;
 
-            // Логика кнопок действия
             const actionsContainer = document.getElementById('action-buttons');
             const contactRaw = job.contacts.toLowerCase();
             
-            // Если похоже на телефон (есть + и цифры)
             if (contactRaw.includes('+381') || contactRaw.includes('+7') || /^\+?\d{8,15}$/.test(contactRaw.replace(/\D/g, ''))) {
                 const phone = contactRaw.replace(/[^\d+]/g, '');
-                actionsContainer.innerHTML += `<a href="tel:${phone}" class="min-h-[48px] px-6 rounded-xl bg-slate-800 text-white font-medium flex items-center justify-center hover:bg-slate-700">📞 Позвонить</a>`;
+                actionsContainer.innerHTML += `<a href="tel:${phone}" class="min-h-[48px] px-6 rounded-xl bg-slate-800 text-white font-medium flex items-center justify-center hover:bg-slate-700">📞 Pozovi</a>`;
             }
             
-            // Если Telegram (@username или t.me)
             if (job.contacts.includes('@')) {
-                // Если это email, не делаем tg ссылку. Простая проверка:
                 if (!job.contacts.includes('.')) { 
                     const tgHandle = job.contacts.split(' ').find(w => w.startsWith('@')).replace('@', '');
-                    actionsContainer.innerHTML += `<a href="https://t.me/${tgHandle}" target="_blank" class="min-h-[48px] px-6 rounded-xl bg-blue-600 text-white font-medium flex items-center justify-center hover:bg-blue-700">💬 Написать</a>`;
+                    actionsContainer.innerHTML += `<a href="https://t.me/${tgHandle}" target="_blank" class="min-h-[48px] px-6 rounded-xl bg-blue-600 text-white font-medium flex items-center justify-center hover:bg-blue-700">💬 Piši</a>`;
                 }
             }
             
-            // Если кнопок нет (например, это просто email) - даем кнопку копирования
             if (actionsContainer.innerHTML === '') {
                 const copyBtn = document.createElement('button');
                 copyBtn.className = "min-h-[48px] px-6 rounded-xl bg-blue-600 text-white font-medium flex items-center justify-center hover:bg-blue-700";
-                copyBtn.textContent = "📋 Скопировать";
+                copyBtn.textContent = "📋 Kopiraj";
                 copyBtn.onclick = () => {
                     navigator.clipboard.writeText(job.contacts);
-                    showToast("Контакты скопированы!");
+                    showToast("Kontakti kopirani!");
                 };
                 actionsContainer.appendChild(copyBtn);
             }
         }
 
         loadVacancy();
-
-        // В самом конце файла vacancy.html, перед закрывающим </body>
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const vacancyId = urlParams.get('id');
-            if (vacancyId) {
-                document.getElementById('lang-ru-vacancy').href = 'vacancy.html?id=' + vacancyId;
-                document.getElementById('lang-sr-vacancy').href = 'vacancy-sr.html?id=' + vacancyId;
-            }
-        });
     </script>
 </body>
 </html>

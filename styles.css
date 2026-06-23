@@ -49,6 +49,17 @@ body {
     }
 }
 
+/* Адаптивность для переключателя языков */
+@media (max-width: 480px) {
+    .flex.gap-1 {
+        gap: 0.25rem;
+    }
+    .flex.gap-1 a {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+}
+
 /* Утилита для скрытия элементов */
 .hidden {
     display: none !important;
