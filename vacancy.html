@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вакансия — JobSerbia</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { blue: { 600: '#2563EB' }, slate: { 50: '#F8FAFC', 500: '#64748B', 800: '#1E293B' } } } }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-white">
+
+    <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
+        <div class="max-w-[800px] mx-auto px-4 h-[72px] flex items-center">
+            <button onclick="history.back()" class="mr-4 text-2xl text-slate-500 hover:text-slate-800">←</button>
+            <a href="index.html" class="text-2xl font-bold text-slate-800">JobSerbia</a>
+        </div>
+    </header>
+
+    <main class="max-w-[800px] mx-auto px-4 py-8">
+        <div id="loader" class="text-center py-10 text-slate-500">Загрузка данных...</div>
+        
+        <div id="error-state" class="hidden text-center py-12">
+            <div class="text-4xl mb-4">😔</div>
+            <h3 class="text-xl font-bold text-slate-800 mb-4">Вакансия не найдена</h3>
+            <a href="index.html" class="inline-flex min-h-[48px] px-6 rounded-xl bg-blue-600 text-white font-medium items-center justify-center">На главную</a>
+        </div>
+
+        <article id="vacancy-content" class="hidden">
+            <div class="mb-6">
+                <h1 id="v-title" class="text-[24px] sm:text-[32px] font-bold text-slate-800 leading-tight mb-2"></h1>
+                <p id="v-company" class="text-[18px] text-slate-800 font-medium mb-4">🏢 </p>
+                <div class="flex flex-wrap gap-3 text-slate-500 text-[15px]">
+                    <span id="v-city" class="bg-slate-100 px-3 py-1 rounded-md">📍 </span>
+                    <span id="v-salary" class="bg-slate-100 px-3 py-1 rounded-md text-slate-800 font-medium">💰 </span>
+                    <span id="v-time" class="px-3 py-1"></span>
+                </div>
+            </div>
+
+            <hr class="border-slate-200 mb-6">
+
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-slate-800 mb-3">Описание вакансии</h3>
+                <div id="v-description" class="text-slate-800 leading-relaxed whitespace-pre-wrap"></div>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-100 rounded-[16px] p-6 text-center sm:text-left sm:flex justify-between items-center gap-4">
+                <div class="mb-4 sm:mb-0">
+                    <p class="text-sm font-medium text-blue-600 uppercase tracking-wider mb-1">Контакты работодателя</p>
+                    <p id="v-contacts" class="text-lg font-bold text-slate-800"></p>
+                </div>
+                <div class="flex gap-2 justify-center" id="action-buttons">
+                    </div>
+            </div>
+        </article>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        // Получаем ID из URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const vacancyId = urlParams.get('id');
+
+        const loader = document.getElementById('loader');
+        const errorState = document.getElementById('error-state');
+        const content = document.getElementById('vacancy-content');
+
+        async function loadVacancy() {
+            if (!vacancyId) {
+                showError();
+                return;
+            }
+
+            const { data, error } = await supabaseClient.from('vacancies').select('*').eq('id', vacancyId).single();
+
+            loader.classList.add('hidden');
+
+            if (error || !data) {
+                showError();
+                return;
+            }
+
+            renderVacancy(data);
+        }
+
+        function showError() {
+            loader.classList.add('hidden');
+            errorState.classList.remove('hidden');
+        }
+
+        function renderVacancy(job) {
+            content.classList.remove('hidden');
+            
+            document.getElementById('v-title').textContent = job.title;
+            document.getElementById('v-company').textContent = `🏢 ${job.company}`;
+            document.getElementById('v-city').textContent = `📍 ${job.city}`;
+            document.getElementById('v-salary').textContent = `💰 ${formatSalary(job.salary_min, job.salary_max)}`;
+            document.getElementById('v-time').textContent = timeAgo(job.created_at);
+            document.getElementById('v-description').textContent = job.description;
+            document.getElementById('v-contacts').textContent = job.contacts;
+
+            // Логика кнопок действия
+            const actionsContainer = document.getElementById('action-buttons');
+            const contactRaw = job.contacts.toLowerCase();
+            
+            // Если похоже на телефон (есть + и цифры)
+            if (contactRaw.includes('+381') || contactRaw.includes('+7') || /^\+?\d{8,15}$/.test(contactRaw.replace(/\D/g, ''))) {
+                const phone = contactRaw.replace(/[^\d+]/g, '');
+                actionsContainer.innerHTML += `<a href="tel:${phone}" class="min-h-[48px] px-6 rounded-xl bg-slate-800 text-white font-medium flex items-center justify-center hover:bg-slate-700">📞 Позвонить</a>`;
+            }
+            
+            // Если Telegram (@username или t.me)
+            if (job.contacts.includes('@')) {
+                // Если это email, не делаем tg ссылку. Простая проверка:
+                if (!job.contacts.includes('.')) { 
+                    const tgHandle = job.contacts.split(' ').find(w => w.startsWith('@')).replace('@', '');
+                    actionsContainer.innerHTML += `<a href="https://t.me/${tgHandle}" target="_blank" class="min-h-[48px] px-6 rounded-xl bg-blue-600 text-white font-medium flex items-center justify-center hover:bg-blue-700">💬 Написать</a>`;
+                }
+            }
+            
+            // Если кнопок нет (например, это просто email) - даем кнопку копирования
+            if (actionsContainer.innerHTML === '') {
+                const copyBtn = document.createElement('button');
+                copyBtn.className = "min-h-[48px] px-6 rounded-xl bg-blue-600 text-white font-medium flex items-center justify-center hover:bg-blue-700";
+                copyBtn.textContent = "📋 Скопировать";
+                copyBtn.onclick = () => {
+                    navigator.clipboard.writeText(job.contacts);
+                    showToast("Контакты скопированы!");
+                };
+                actionsContainer.appendChild(copyBtn);
+            }
+        }
+
+        loadVacancy();
+    </script>
+</body>
+</html>

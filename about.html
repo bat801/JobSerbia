@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О проекте — JobSerbia</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { blue: { 600: '#2563EB' }, slate: { 50: '#F8FAFC', 500: '#64748B', 800: '#1E293B' } } } }
+        }
+    </script>
+</head>
+<body class="bg-white flex flex-col min-h-screen">
+
+    <header class="sticky top-0 z-40 bg-white border-b border-slate-200">
+        <div class="max-w-[800px] mx-auto px-4 h-[72px] flex items-center justify-between">
+            <a href="index.html" class="text-2xl font-bold text-slate-800">JobSerbia</a>
+            <a href="index.html" class="text-blue-600 font-medium hover:underline">К вакансиям</a>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center py-12 px-4">
+        <div class="max-w-[600px] text-center">
+            <div class="text-6xl mb-6">🇷🇸</div>
+            <h1 class="text-3xl font-bold text-slate-800 mb-4">JobSerbia</h1>
+            <p class="text-lg text-slate-600 leading-relaxed mb-8">
+                Сайт создан для русскоязычных соискателей и работодателей в Сербии. 
+                Мы помогаем найти работу без посредников быстро и удобно.
+            </p>
+            
+            <div class="bg-slate-50 p-6 rounded-[16px] border border-slate-200 inline-block text-left w-full sm:w-auto">
+                <h3 class="font-bold text-slate-800 mb-2">Связь с разработчиком:</h3>
+                <a href="mailto:hello@jobserbia.com" class="text-blue-600 font-medium hover:underline text-lg">hello@jobserbia.com</a>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
